@@ -1,52 +1,128 @@
-## Packages Overview
+# Infra-PulumiCommons-Package
 
-### infrastructure/commons/vpc
+`Infra-PulumiCommons-Package` is a Go library that streamlines cloud infrastructure management with Pulumi. It offers reusable modules, services, and utilities for AWS resources, including Lambda functions, API Gateway, RDS databases, and networking components.
 
-- **Purpose:** Contains utilities for working with AWS VPC resources.
-- **Key File:** [`vpc.go`](infrastructure/commons/vpc/vpc.go)
-- **Main Function:** [`GetVpcConfigArgs`](infrastructure/commons/vpc/vpc.go) - Generates VPC configuration arguments for Lambda functions.
+## Features
 
-### infrastructure/core
+- **DTOs**: Define resource configurations with Data Transfer Objects.
+- **Mappers**: Map configurations to Pulumi resource arguments.
+- **Modules**: Modular components for REST APIs, databases, and Lambda functions.
+- **Services**: Core services for deploying and managing AWS resources.
 
-- **Purpose:** Core utilities for Pulumi resource management.
-- **Key File:** [`pulumi.go`](infrastructure/core/pulumi.go)
-- **Main Function:** [`MergeStringMap`](infrastructure/core/pulumi.go) - Merges multiple Pulumi string maps, useful for combining resource tags.
+## Folder Structure
 
-### infrastructure/lambda
+### `dto/`
 
-- **Purpose:** Provides high-level functions to create AWS Lambda resources with different deployment strategies.
-- **Key Files:**
-  - [`lambda.go`](infrastructure/lambda/lambda.go): Entry point for creating Lambda functions based on type (EFS or S3).
-  - [`lambda.efs.go`](infrastructure/lambda/lambda.efs.go): Logic for deploying Lambda functions with EFS.
-  - [`lambda.s3.go`](infrastructure/lambda/lambda.s3.go): Logic for deploying Lambda functions from S3.
-- **DTOs:** [`dto/lambda.dto.go`](infrastructure/lambda/dto/lambda.dto.go) - Data transfer objects for Lambda configuration.
+Data Transfer Objects for resource configurations:
 
-### infrastructure/lambda/core
+- `apigw.dto.go`: API Gateway DTOs
+- `db.dto.go`: Database DTOs
+- `lambda.dto.go`: Lambda DTOs
+- `sg.dto.go`: Security Group DTOs
 
-- **Purpose:** Lambda-related utilities.
-- **Key Files:**
-  - [`archive.go`](infrastructure/lambda/core/archive.go): Builds source zip archives for Lambda deployment.
-  - [`cloudwatch.go`](infrastructure/lambda/core/cloudwatch.go): Creates CloudWatch alarms for Lambda monitoring.
+### `mappers/`
+
+Utilities for mapping configurations to Pulumi resource arguments:
+
+- `pulumi.mappers.go`: General Pulumi mappers
+- `vpc.mappers.go`: VPC configuration mappers
+
+### `modules/`
+
+Modular infrastructure components:
+
+- `rest/`: REST API modules
+  - `apigw.go`: API Gateway
+  - `db.go`: Database
+  - `lambda.go`: Lambda
+  - `module.go`: Core module logic
+  - `config/`: AWS policies and tags
+
+### `services/`
+
+Services for cloud resource management:
+
+- `apigw/`: API Gateway services
+  - `core/`: Deployment and resource management
+- `lambda/`: Lambda services
+  - `lambda.efs.go`: Lambda with EFS
+  - `lambda.s3.go`: Lambda with S3
+  - `core/`: Lambda utilities
+- `network/`: Networking services
+  - `sg.go`: Security Group management
+
+## Requirements
+
+- **Go**: v1.24.2 or newer
+- **Pulumi**: For infrastructure management
+
+## Installation
+
+Add the package to your Go module:
+
+```bash
+go get github.com/vincenzotumbiolo/infra-pulumicommons-package
+```
 
 ## Usage
 
-- Use the functions in `infrastructure/lambda` to provision Lambda functions with Pulumi.
-- Utilities in `infrastructure/commons/vpc` and `infrastructure/core` help with networking and resource tagging.
+Example: Creating a Security Group
 
-## Testing
+```go
+package main
 
-Run all tests:
+import (
+  "github.com/vincenzotumbiolo/infra-pulumicommons-package/dto"
+  "github.com/vincenzotumbiolo/infra-pulumicommons-package/services/network"
+  "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
+)
 
-```sh
-make test.all
+func main() {
+  pulumi.Run(func(ctx *pulumi.Context) error {
+    sgConfig := dto.SecurityGroupDTO{
+      Name:        "example-sg",
+      Description: "Example security group",
+      Ingress: []dto.SecurityGroupRuleDTO{
+        {
+          Protocol:  "tcp",
+          FromPort:  80,
+          ToPort:    80,
+          CidrBlock: "0.0.0.0/0",
+        },
+      },
+      Egress: []dto.SecurityGroupRuleDTO{
+        {
+          Protocol:  "tcp",
+          FromPort:  0,
+          ToPort:    65535,
+          CidrBlock: "0.0.0.0/0",
+        },
+      },
+    }
+
+    _, err := network.CreateSecurityGroup(ctx, sgConfig)
+    return err
+  })
+}
 ```
 
-Run coverage:
+## Dependencies
 
-```sh
-make test.all.cover
+Major dependencies:
+
+```bash
+github.com/pulumi/pulumi-aws/sdk/v7
+github.com/pulumi/pulumi/sdk/v3
 ```
 
----
+## Contributing
 
-For more details, see individual package documentation and
+Contributions are welcome! Open an issue or submit a pull request to propose changes.
+
+## License
+
+MIT License. See the LICENSE file for details.
+
+## Author
+
+Vincenzo Tumbiolo
