@@ -8,9 +8,9 @@ import (
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/iam"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/lambda"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	policy "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/aws"
-	dto "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/dto/aws"
-	lambda_services "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/internal/aws/lambda"
+	policy "github.com/vtechstudio/infra-pulumicommons-package/infrastructure/config/aws"
+	dto "github.com/vtechstudio/infra-pulumicommons-package/infrastructure/dto/aws"
+	lambda_services "github.com/vtechstudio/infra-pulumicommons-package/infrastructure/internal/aws/lambda"
 )
 
 func (mod RESTModule) CreateLambda(args *dto.RESTLambdaArgs) (*lambda.Function, error) {
