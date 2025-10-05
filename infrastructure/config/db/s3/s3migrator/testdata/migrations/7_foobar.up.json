@@ -1,0 +1,7 @@
+[
+  {
+    "action": "UPLOAD",
+    "path": "/path/to/file",
+    "filename": "file.mp4"
+  }
+]

@@ -1,0 +1,8 @@
+en_explanation-aoi.srt1
+00:00:00,669 --> 00:00:04,390
+The highlighted area on the audiogram
+indicates where your hearing ability
+
+2
+00:00:04,390 --> 00:00:05,615
+could be improved.
