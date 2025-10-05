@@ -1,7 +1,7 @@
 package sql_integration
 
 import (
-	sqlu "github.com/amplifon-x/ax-go-application-layer/v5/db/sql/utils"
+	sqlu "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/db/sql/utils"
 	"github.com/google/uuid"
 	"github.com/taleeus/sqld"
 )
