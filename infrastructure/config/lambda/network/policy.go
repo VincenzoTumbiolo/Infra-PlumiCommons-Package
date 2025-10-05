@@ -3,8 +3,8 @@ package network
 import (
 	"errors"
 
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/apperrors"
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/apperrors"
 )
 
 // GeneratePolicy builds an authorizer policy response compliant to the AWS APIGateway

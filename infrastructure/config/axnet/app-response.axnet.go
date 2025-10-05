@@ -3,8 +3,8 @@ package axnet
 import (
 	"errors"
 
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/apperrors"
 	"github.com/gofiber/fiber/v2"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/apperrors"
 )
 
 // Response is the netlayer response schema

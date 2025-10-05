@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/axnet/email"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/axnet/email/mock"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/axnet/email"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/axnet/email/mock"
 )
 
 func TestMockSender(t *testing.T) {

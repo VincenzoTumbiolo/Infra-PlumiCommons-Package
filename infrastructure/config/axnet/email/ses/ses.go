@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/axnet/email"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	awsses "github.com/aws/aws-sdk-go-v2/service/sesv2"
 	"github.com/aws/aws-sdk-go-v2/service/sesv2/types"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/axnet/email"
 )
 
 type Sender struct {

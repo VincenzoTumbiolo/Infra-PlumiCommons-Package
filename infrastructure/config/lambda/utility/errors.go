@@ -3,7 +3,7 @@ package utility
 import (
 	"net/http"
 
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/apperrors"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/apperrors"
 )
 
 type PatientError uint

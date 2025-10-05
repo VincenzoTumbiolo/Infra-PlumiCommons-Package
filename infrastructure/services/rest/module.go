@@ -1,8 +1,8 @@
 package rest
 
 import (
+	policy "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/aws"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	policy "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/aws"
 )
 
 type RESTModule struct {

@@ -61,7 +61,7 @@ Services for cloud resource management:
 Add the package to your Go module:
 
 ```bash
-go get github.com/vincenzotumbiolo/infra-pulumicommons-package
+go get github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package
 ```
 
 ## Usage
@@ -72,8 +72,8 @@ Example: Creating a Security Group
 package main
 
 import (
-  "github.com/vincenzotumbiolo/infra-pulumicommons-package/dto"
-  "github.com/vincenzotumbiolo/infra-pulumicommons-package/services/network"
+  "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/dto"
+  "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/services/network"
   "github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 

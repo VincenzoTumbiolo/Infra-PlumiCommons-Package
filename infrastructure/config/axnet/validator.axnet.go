@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/apperrors"
 	"github.com/go-playground/validator/v10"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/apperrors"
 )
 
 type (
