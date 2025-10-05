@@ -5,7 +5,7 @@ import (
 
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/cloudwatch"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/vtechstudio/infra-pulumicommons-package/infrastructure/mappers"
+	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/mappers"
 )
 
 func CreateLambdaAlarms(ctx *pulumi.Context, functionName string, tags pulumi.StringMap) error {

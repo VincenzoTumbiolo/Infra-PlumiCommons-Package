@@ -3,7 +3,7 @@ package lambda
 import (
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/lambda"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	dto "github.com/vtechstudio/infra-pulumicommons-package/infrastructure/dto/aws"
+	dto "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/dto/aws"
 )
 
 func CreateLambdaS3(ctx *pulumi.Context, args dto.LambdaS3Input, roleArn pulumi.StringInput) (*lambda.Function, error) {
