@@ -3,8 +3,8 @@ package sql_integration
 import (
 	"time"
 
-	pgtypex "github.com/amplifon-x/ax-go-application-layer/v5/db/sql/pgclient/typex"
-	"github.com/amplifon-x/ax-go-application-layer/v5/opt"
+	pgtypex "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/db/sql/pgclient/typex"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/opt"
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgtype"
 )

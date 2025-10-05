@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/amplifon-x/ax-go-application-layer/v5/assert"
-	"github.com/amplifon-x/ax-go-application-layer/v5/db/sql/pgclient"
-	sqlu "github.com/amplifon-x/ax-go-application-layer/v5/db/sql/utils"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/assert"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/db/sql/pgclient"
+	sqlu "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/db/sql/utils"
 	"github.com/jackc/pgx/v5/stdlib"
 	"github.com/jmoiron/sqlx"
 	"github.com/testcontainers/testcontainers-go"

@@ -1,7 +1,7 @@
 package sqlu
 
 import (
-	"github.com/amplifon-x/ax-go-application-layer/v5/slicex"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/slicex"
 	"github.com/taleeus/sqld"
 )
 

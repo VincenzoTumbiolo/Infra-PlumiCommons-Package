@@ -7,7 +7,6 @@ import (
 	"os"
 	"strconv"
 
-	"github.com/amplifon-x/ax-go-application-layer/v5/db/redisclient"
 	"github.com/joho/godotenv"
 )
 
@@ -337,25 +336,6 @@ func LoadLogLevel() slog.Level {
 		return slog.LevelError
 	default:
 		return slog.LevelInfo
-	}
-}
-
-func LoadRedisConfig() redisclient.RedisConfig {
-	url, found := os.LookupEnv("REDIS_URL")
-	if !found {
-		slog.Error("`REDIS_URL` not found")
-		panic(ErrNoEnv)
-	}
-
-	pass, found := os.LookupEnv("REDIS_PASSWORD")
-	if !found {
-		slog.Error("`REDIS_PASSWORD` not found")
-		pass = ""
-	}
-
-	return redisclient.RedisConfig{
-		Host:     url,
-		Password: pass,
 	}
 }
 
