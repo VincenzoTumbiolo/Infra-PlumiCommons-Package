@@ -3,8 +3,8 @@ package lambda
 import (
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/lambda"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	dto "github.com/vtechstudio/infra-pulumicommons-package/infrastructure/dto/aws"
-	lambda_core "github.com/vtechstudio/infra-pulumicommons-package/infrastructure/internal/aws/lambda/core"
+	dto "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/dto/aws"
+	lambda_core "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/internal/aws/lambda/core"
 )
 
 func CreateLambdaEFS(ctx *pulumi.Context, args dto.LambdaArgs, roleArn pulumi.StringInput) (*lambda.Function, error) {

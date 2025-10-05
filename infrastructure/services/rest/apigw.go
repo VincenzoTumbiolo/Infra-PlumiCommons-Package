@@ -6,8 +6,8 @@ import (
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/apigateway"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/iam"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	policy "github.com/vtechstudio/infra-pulumicommons-package/infrastructure/config/aws"
-	dto "github.com/vtechstudio/infra-pulumicommons-package/infrastructure/dto/aws"
+	policy "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/aws"
+	dto "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/dto/aws"
 
 	"log/slog"
 
