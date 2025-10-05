@@ -5,9 +5,9 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/apperrors"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/axnet"
 	"github.com/goccy/go-json"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/apperrors"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/axnet"
 
 	"github.com/aws/aws-lambda-go/events"
 )

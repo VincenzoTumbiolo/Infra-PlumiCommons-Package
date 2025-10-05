@@ -8,8 +8,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/axnet/email"
 	awsses "github.com/aws/aws-sdk-go-v2/service/sesv2"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/axnet/email"
 )
 
 type fakeSES struct {

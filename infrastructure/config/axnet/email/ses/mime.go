@@ -7,7 +7,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/axnet/email"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/axnet/email"
 )
 
 func buildRawMIME(m email.Mail) []byte {

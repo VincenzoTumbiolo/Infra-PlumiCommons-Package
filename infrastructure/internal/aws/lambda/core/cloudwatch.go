@@ -3,9 +3,9 @@ package lambda_core
 import (
 	"fmt"
 
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/mappers"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/cloudwatch"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/mappers"
 )
 
 func CreateLambdaAlarms(ctx *pulumi.Context, functionName string, tags pulumi.StringMap) error {

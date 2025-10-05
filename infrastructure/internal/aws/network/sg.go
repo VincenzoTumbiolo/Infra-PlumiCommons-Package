@@ -3,10 +3,10 @@ package network
 import (
 	"fmt"
 
+	dto "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/dto/aws"
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/mappers"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/ec2"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	dto "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/dto/aws"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/mappers"
 )
 
 func CreateSecurityGroup(ctx *pulumi.Context, name string, args *dto.SecurityGroupArgs) (*ec2.SecurityGroup, error) {

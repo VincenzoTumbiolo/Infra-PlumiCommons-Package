@@ -4,13 +4,13 @@ import (
 	"errors"
 	"fmt"
 
+	policy "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/aws"
+	dto "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/dto/aws"
+	lambda_services "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/internal/aws/lambda"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/cloudwatch"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/iam"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/lambda"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	policy "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/aws"
-	dto "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/dto/aws"
-	lambda_services "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/internal/aws/lambda"
 )
 
 func (mod RESTModule) CreateLambda(args *dto.RESTLambdaArgs) (*lambda.Function, error) {

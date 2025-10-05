@@ -3,8 +3,8 @@ package utility
 import (
 	"errors"
 
+	"github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/apperrors"
 	"github.com/aws/aws-lambda-go/events"
-	"github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/config/apperrors"
 )
 
 const JWT_ISSUER = "ax-global-auth"

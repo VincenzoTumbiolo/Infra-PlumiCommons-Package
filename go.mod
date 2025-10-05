@@ -1,4 +1,4 @@
-module github.com/vincenzotumbiolo/infra-pulumicommons-package
+module github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package
 
 go 1.24.2
 

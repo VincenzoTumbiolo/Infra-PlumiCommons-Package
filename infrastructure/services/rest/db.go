@@ -3,9 +3,9 @@ package rest
 import (
 	"fmt"
 
+	dto "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/dto/aws"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/rds"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
-	dto "github.com/vincenzotumbiolo/infra-pulumicommons-package/infrastructure/dto/aws"
 )
 
 func (mod RESTModule) CreatePostgresCluster(name string, args *dto.PostgresClusterArgs) (*rds.Cluster, error) {
