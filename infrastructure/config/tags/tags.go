@@ -8,6 +8,6 @@ type DefaultTags struct {
 	ProjectOwner         string `json:"ProjectOwner"`
 	Project              string `json:"Project"`
 	CreatedBy            string `json:"CreatedBy"`
-	ProjectPrefix        string `json:"project_prefix"`
+	ProjectPrefix        string `json:"ProjectPrefix"`
 	Suffix               string `json:"Suffix"`
 }
