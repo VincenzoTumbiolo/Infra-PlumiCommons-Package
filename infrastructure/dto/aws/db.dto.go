@@ -6,7 +6,6 @@ import (
 )
 
 type PostgresClusterArgs struct {
-	Tags                   pulumi.StringMap
 	SubnetIds              []string
 	SecurityGroupIds       pulumi.StringArray
 	MasterUsername         *string
