@@ -23,27 +23,6 @@ func (mod RESTModule) CreateRestAPI(input dto.CreateRestAPIInput) error {
 		slog.Error("Failed to Create Rest API", "err: ", err)
 		return err
 	}
-	var authorizer *apigateway.Authorizer
-	var authID pulumi.StringPtrInput = nil
-	if input.LambdaAuth != nil {
-		authorizer, err = mod.CreateAuthorizer(dto.CreateAuthorizerInput{
-			CreateRestAPI: dto.CreateRestAPI{
-
-				BaseName:  input.BaseName,
-				Region:    input.Region,
-				AccountId: input.AccountId,
-			},
-			RestApi:        restApi,
-			Tags:           input.Tags,
-			LambdaAuth:     input.LambdaAuth,
-			IdentitySource: input.IdentitySource,
-		})
-		if err != nil {
-			slog.Error("Failed to Create API Authorizer", "err: ", err)
-			return err
-		}
-		authID = authorizer.ID().ToStringPtrOutput()
-	}
 
 	allOptions := make([]pulumi.Resource, 0)
 	if len(input.Endpoints) != 0 {
@@ -51,7 +30,6 @@ func (mod RESTModule) CreateRestAPI(input dto.CreateRestAPIInput) error {
 			RestApi:    restApi,
 			Endpoints:  input.Endpoints,
 			AllOptions: allOptions,
-			AuthID:     &authID,
 			CreateRestAPI: dto.CreateRestAPI{
 				BaseName:  input.BaseName,
 				Region:    input.Region,
