@@ -77,7 +77,7 @@ func (mod RESTModule) CreateRestAPI(input dto.CreateRestAPIInput) error {
 
 	domain, err := apigateway.NewDomainName(mod.Ctx, fmt.Sprintf("%s-domain", input.BaseName), &apigateway.DomainNameArgs{
 		DomainName:             pulumi.String(input.DomainName),
-		RegionalCertificateArn: pulumi.String(fmt.Sprintf("arn:aws:acm:%s:%s:certificate/%s", input.CertificateRegion, input.AccountId, input.HttpsCertificateId)),
+		RegionalCertificateArn: pulumi.String(fmt.Sprintf("arn:aws:acm:%s:%s:certificate/%s", input.Region, input.AccountId, input.HttpsCertificateId)),
 		EndpointConfiguration: &apigateway.DomainNameEndpointConfigurationArgs{
 			Types: pulumi.String("REGIONAL"),
 		},
