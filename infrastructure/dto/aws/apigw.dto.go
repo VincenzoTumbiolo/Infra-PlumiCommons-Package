@@ -46,6 +46,7 @@ type CreateRestAPIInput struct {
 	LambdaAuth         *lambda.Function
 	DomainName         string
 	HttpsCertificateId string
+	CertificateRegion  string
 	IdentitySource     string
 	StageName          string
 	Tags               pulumi.StringMapInput
