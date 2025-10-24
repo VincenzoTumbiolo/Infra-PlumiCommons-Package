@@ -1,11 +1,11 @@
-package rest
+package service
 
 import (
 	policy "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/aws"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-type RESTModule struct {
+type ServiceModule struct {
 	Ctx         *pulumi.Context
 	DefaultTags pulumi.StringMap
 	Environment pulumi.StringMap
@@ -17,8 +17,8 @@ func New(
 	ctx *pulumi.Context,
 	defaultTags pulumi.StringMap,
 	environment pulumi.StringMap,
-) *RESTModule {
-	return &RESTModule{
+) *ServiceModule {
+	return &ServiceModule{
 		Ctx:         ctx,
 		DefaultTags: defaultTags,
 		Environment: environment,

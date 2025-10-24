@@ -1,4 +1,4 @@
-package rest
+package service
 
 import (
 	"errors"
@@ -13,7 +13,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func (mod RESTModule) CreateLambda(args *dto.RESTLambdaArgs) (*lambda.Function, error) {
+func (mod ServiceModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function, error) {
 	args.LambdaArgs.Tags = mod.DefaultTags
 
 	var statements = mod.Policies.Build(

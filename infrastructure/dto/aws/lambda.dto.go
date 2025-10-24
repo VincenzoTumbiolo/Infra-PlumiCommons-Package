@@ -65,7 +65,7 @@ type LambdaS3Input struct {
 	LambdaS3Args
 }
 
-type RESTLambdaArgs struct {
+type ServiceLambdaArgs struct {
 	LambdaArgs
 	*LambdaEFSArgs
 	*LambdaS3Args
