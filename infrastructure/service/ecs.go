@@ -14,14 +14,14 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName string, in dto.ECSInput) error {
+func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName string, in dto.ECSInput) (*ecs.Service, error) {
 	// Cluster
 	clusterName := pulumi.String(baseName + "-ecs-cluster")
 	if _, err := ecs.NewCluster(ctx, baseName+"-cluster", &ecs.ClusterArgs{
 		Name: clusterName,
 		Tags: mod.DefaultTags,
 	}); err != nil {
-		return err
+		return nil, err
 	}
 
 	// CloudWatch Log Group
@@ -35,7 +35,7 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 		Tags:            mod.DefaultTags,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// IAM roles (execution + task)
@@ -48,13 +48,13 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 		Tags: mod.DefaultTags,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if _, err = iam.NewRolePolicyAttachment(ctx, baseName+"-exec-pol", &iam.RolePolicyAttachmentArgs{
 		Role:      execRole.Name,
 		PolicyArn: pulumi.String("arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"),
 	}); err != nil {
-		return err
+		return nil, err
 	}
 
 	taskRole, err := iam.NewRole(ctx, baseName+"-task-role", &iam.RoleArgs{
@@ -66,7 +66,7 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 		Tags: mod.DefaultTags,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 	if _, err = iam.NewRolePolicy(ctx, baseName+"-task-logs", &iam.RolePolicyArgs{
 		Name: pulumi.String(baseName + "-log-policy"),
@@ -79,7 +79,7 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 		      "Resource":"arn:aws:logs:%s:%s:*"}
 		  ]}`, in.Region, in.AccountID)),
 	}); err != nil {
-		return err
+		return nil, err
 	}
 	if in.AttachS3FullAccess {
 		_, _ = iam.NewRolePolicyAttachment(ctx, baseName+"-task-s3", &iam.RolePolicyAttachmentArgs{
@@ -146,7 +146,7 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 		Tags:                    mod.DefaultTags,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Service (pubblico, NO LB)
@@ -173,7 +173,7 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 		Tags: mod.DefaultTags,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	// Autoscaling DesiredCount
@@ -186,7 +186,7 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 		ServiceNamespace:  pulumi.String("ecs"),
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
 	_, _ = appautoscaling.NewPolicy(ctx, baseName+"-as-mem", &appautoscaling.PolicyArgs{
 		PolicyType:        pulumi.String("TargetTrackingScaling"),
@@ -246,13 +246,13 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 			}),
 		})
 		if err != nil {
-			return err
+			return nil, err
 		}
 	} else {
 		ctx.Log.Info("[DNS] Skipping Route53 A-record: missing HostedZoneId/RecordName/BackendPublicIp", nil)
 	}
 
-	return nil
+	return svc, nil
 }
 
 func (mod ServiceModule) CreateService(ctx *pulumi.Context, baseName string, in dto.ECSInput) error {
