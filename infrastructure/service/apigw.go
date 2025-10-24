@@ -1,4 +1,4 @@
-package rest
+package service
 
 import (
 	"fmt"
@@ -14,7 +14,7 @@ import (
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/lambda"
 )
 
-func (mod RESTModule) CreateRestAPI(input dto.CreateRestAPIInput) error {
+func (mod ServiceModule) CreateRestAPI(input dto.CreateRestAPIInput) error {
 	restApi, err := apigateway.NewRestApi(mod.Ctx, fmt.Sprintf("%s-rest-api", input.BaseName), &apigateway.RestApiArgs{
 		Name: pulumi.StringPtr(fmt.Sprintf("%s-rest-api", input.BaseName)),
 		Tags: input.Tags,
@@ -177,7 +177,7 @@ func (mod RESTModule) CreateRestAPI(input dto.CreateRestAPIInput) error {
 	return nil
 }
 
-func (mod RESTModule) CreateEndpoints(input dto.CreateEndpointsInput) ([]pulumi.Resource, error) {
+func (mod ServiceModule) CreateEndpoints(input dto.CreateEndpointsInput) ([]pulumi.Resource, error) {
 	if err := validateUniqueEndpoints(input.Endpoints); err != nil {
 		slog.Error("Duplicate endpoints detected", "err", err)
 		return nil, err
@@ -232,7 +232,7 @@ func (mod RESTModule) CreateEndpoints(input dto.CreateEndpointsInput) ([]pulumi.
 	return input.AllOptions, nil
 }
 
-func (mod RESTModule) CreateOptions(input dto.CreateOptionsInput) (*apigateway.IntegrationResponse, *apigateway.Method, error) {
+func (mod ServiceModule) CreateOptions(input dto.CreateOptionsInput) (*apigateway.IntegrationResponse, *apigateway.Method, error) {
 	optionsMethod, err := apigateway.NewMethod(mod.Ctx, fmt.Sprintf("%s-optionsMethod", input.Endpoint.Name), &apigateway.MethodArgs{
 		RestApi:       input.RestApi.ID(),
 		ResourceId:    input.BaseResource.ID(),
@@ -297,7 +297,7 @@ func (mod RESTModule) CreateOptions(input dto.CreateOptionsInput) (*apigateway.I
 	return integrationResponse, optionsMethod, nil
 }
 
-func (mod RESTModule) CreateMethodIntegration(input dto.CreateMethodIntegrationInput) error {
+func (mod ServiceModule) CreateMethodIntegration(input dto.CreateMethodIntegrationInput) error {
 	var methodArgs = &apigateway.MethodArgs{
 		RestApi:       input.ApiID,
 		ResourceId:    input.RootResourceID,
@@ -332,7 +332,7 @@ func (mod RESTModule) CreateMethodIntegration(input dto.CreateMethodIntegrationI
 	return nil
 }
 
-func (mod RESTModule) CreateStage(input dto.CreateStageInput) (*apigateway.Stage, error) {
+func (mod ServiceModule) CreateStage(input dto.CreateStageInput) (*apigateway.Stage, error) {
 	stage, err := apigateway.NewStage(mod.Ctx, fmt.Sprintf("%s-stage", input.BaseName), &apigateway.StageArgs{
 		RestApi:     input.RestApi.ID(),
 		Deployment:  input.Deploy.ID(),
@@ -362,7 +362,7 @@ func (mod RESTModule) CreateStage(input dto.CreateStageInput) (*apigateway.Stage
 	return stage, nil
 }
 
-func (mod RESTModule) CreateAuthorizer(input dto.CreateAuthorizerInput) (*apigateway.Authorizer, error) {
+func (mod ServiceModule) CreateAuthorizer(input dto.CreateAuthorizerInput) (*apigateway.Authorizer, error) {
 	invokeRole, err := iam.NewRole(mod.Ctx, fmt.Sprintf("%s-invocation-role", input.BaseName), &iam.RoleArgs{
 		Name:             pulumi.String(fmt.Sprintf("%s-invocation-role", input.BaseName)),
 		Path:             pulumi.String("/"),
