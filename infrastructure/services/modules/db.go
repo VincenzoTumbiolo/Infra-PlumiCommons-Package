@@ -8,7 +8,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func (mod ServiceModule) CreatePostgresCluster(name string, args *dto.PostgresClusterArgs) (*rds.Cluster, error) {
+func (mod AWSModule) CreatePostgresCluster(name string, args *dto.PostgresClusterArgs) (*rds.Cluster, error) {
 
 	// Subnet Group
 	subnetGroup, err := rds.NewSubnetGroup(mod.Ctx, fmt.Sprintf("%s-db-subnet-group", name), &rds.SubnetGroupArgs{

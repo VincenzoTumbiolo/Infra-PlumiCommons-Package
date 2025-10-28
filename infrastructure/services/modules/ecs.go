@@ -14,7 +14,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName string, in dto.ECSInput) (*ecs.Service, error) {
+func (mod AWSModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName string, in dto.ECSInput) (*ecs.Service, error) {
 	// Cluster
 	clusterName := pulumi.String(baseName + "-ecs-cluster")
 	if _, err := ecs.NewCluster(ctx, baseName+"-cluster", &ecs.ClusterArgs{
@@ -255,7 +255,7 @@ func (mod ServiceModule) CreateServiceStandAlone(ctx *pulumi.Context, baseName s
 	return svc, nil
 }
 
-func (mod ServiceModule) CreateService(ctx *pulumi.Context, baseName string, in dto.ECSInput) error {
+func (mod AWSModule) CreateService(ctx *pulumi.Context, baseName string, in dto.ECSInput) error {
 	// Cluster
 	clusterName := pulumi.String(baseName + "-ecs-cluster")
 	if _, err := ecs.NewCluster(ctx, baseName+"-cluster", &ecs.ClusterArgs{

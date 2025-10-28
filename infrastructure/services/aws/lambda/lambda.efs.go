@@ -2,7 +2,7 @@ package lambda
 
 import (
 	dto "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/dto/aws"
-	lambda_core "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/internal/aws/lambda/core"
+	lambda_core "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/services/aws/lambda/core"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/lambda"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )

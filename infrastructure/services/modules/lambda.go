@@ -6,14 +6,14 @@ import (
 
 	policy "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/aws"
 	dto "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/dto/aws"
-	lambda_services "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/internal/aws/lambda"
+	lambda_services "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/services/aws/lambda"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/cloudwatch"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/iam"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/lambda"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func (mod ServiceModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function, error) {
+func (mod AWSModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function, error) {
 	args.LambdaArgs.Tags = mod.DefaultTags
 
 	var statements = mod.Policies.Build(

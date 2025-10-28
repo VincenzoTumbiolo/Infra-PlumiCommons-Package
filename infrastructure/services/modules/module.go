@@ -5,7 +5,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-type ServiceModule struct {
+type AWSModule struct {
 	Ctx         *pulumi.Context
 	DefaultTags pulumi.StringMap
 	Environment pulumi.StringMap
@@ -17,8 +17,8 @@ func New(
 	ctx *pulumi.Context,
 	defaultTags pulumi.StringMap,
 	environment pulumi.StringMap,
-) *ServiceModule {
-	return &ServiceModule{
+) *AWSModule {
+	return &AWSModule{
 		Ctx:         ctx,
 		DefaultTags: defaultTags,
 		Environment: environment,
