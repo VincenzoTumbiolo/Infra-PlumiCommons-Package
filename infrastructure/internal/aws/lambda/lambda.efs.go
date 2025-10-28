@@ -59,7 +59,5 @@ func CreateLambdaEFS(ctx *pulumi.Context, args dto.LambdaArgs, roleArn pulumi.St
 		return nil, err
 	}
 
-	lambda_core.CreateLambdaAlarms(ctx, args.Name, args.Tags)
-
 	return resp, nil
 }
