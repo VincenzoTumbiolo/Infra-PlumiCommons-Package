@@ -1,4 +1,4 @@
-package service
+package vtech_aws
 
 import (
 	"errors"

@@ -1,4 +1,4 @@
-package service
+package vtech_aws
 
 import (
 	policy "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/config/aws"
