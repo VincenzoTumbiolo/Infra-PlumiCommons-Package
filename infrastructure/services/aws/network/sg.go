@@ -9,7 +9,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func CreateSecurityGroup(ctx *pulumi.Context, name string, args *dto.SecurityGroupArgs) (*ec2.SecurityGroup, error) {
+func CreateSecurityGroup(ctx *pulumi.Context, name string, args dto.SecurityGroupArgs) (*ec2.SecurityGroup, error) {
 	sg, err := ec2.NewSecurityGroup(ctx, name, &ec2.SecurityGroupArgs{
 		VpcId:       pulumi.StringPtrFromPtr(args.VpcID),
 		Description: pulumi.StringPtrFromPtr(args.Description),
