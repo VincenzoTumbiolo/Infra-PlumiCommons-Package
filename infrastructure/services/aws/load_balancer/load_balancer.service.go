@@ -15,7 +15,7 @@ func CreateService(ctx *pulumi.Context, in dto.LoadBalancerInput) (*lb.LoadBalan
 	// security_groups: solo per "application"
 	var sgs pulumi.StringArray
 	if in.LbType == "application" && in.LbSecurityGroupId != nil {
-		sgs = pulumi.StringArray{pulumi.String(*in.LbSecurityGroupId)}
+		sgs = pulumi.StringArray{*in.LbSecurityGroupId}
 	}
 
 	// access_logs

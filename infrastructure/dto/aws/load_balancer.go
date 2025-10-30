@@ -16,7 +16,7 @@ type ListenerInput struct {
 type LoadBalancerInput struct {
 	LbName            string           // var.lb_name
 	LbType            string           // var.lb_type ("application" | "network" | "gateway")
-	LbSecurityGroupId *pulumi.ID       // var.lb_security_group_id (usata solo se LbType == "application")
+	LbSecurityGroupId *pulumi.IDOutput // var.lb_security_group_id (usata solo se LbType == "application")
 	LbSubnetIds       []string         // var.lb_subnet_ids
 	LogBucket         string           // var.log_bucket
 	Tags              pulumi.StringMap // var.tags
