@@ -6,6 +6,7 @@ import (
 )
 
 type ListenerInput struct {
+	Name           string
 	AwsLbArn       string           // var.aws_lb_arn
 	Port           int              // var.lb_forward_listener_port
 	Protocol       string           // var.lb_forward_listener_protocol

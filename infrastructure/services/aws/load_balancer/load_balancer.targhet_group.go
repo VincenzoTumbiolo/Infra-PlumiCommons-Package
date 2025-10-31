@@ -13,7 +13,7 @@ func CreateTargetGroup(ctx *pulumi.Context, in dto.TargetGroupInput) (*lb.Target
 		tags = pulumi.StringMap{}
 	}
 
-	tg, err := lb.NewTargetGroup(ctx, "this", &lb.TargetGroupArgs{
+	tg, err := lb.NewTargetGroup(ctx, in.Name, &lb.TargetGroupArgs{
 		Name:       pulumi.String(in.Name),
 		Port:       pulumi.Int(in.Port),
 		TargetType: pulumi.String(in.TargetType),

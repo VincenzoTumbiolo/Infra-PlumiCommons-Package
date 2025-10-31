@@ -1,6 +1,8 @@
 package load_balancer
 
 import (
+	"fmt"
+
 	dto "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/dto/aws"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/lb"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -13,7 +15,7 @@ func CreateListener(ctx *pulumi.Context, in dto.ListenerInput) (*lb.Listener, er
 		cert = pulumi.StringPtr(*in.CertificateArn)
 	}
 
-	listener, err := lb.NewListener(ctx, "this", &lb.ListenerArgs{
+	listener, err := lb.NewListener(ctx, fmt.Sprintf("%s-listener", in.Name), &lb.ListenerArgs{
 		LoadBalancerArn: pulumi.String(in.AwsLbArn),
 		Port:            pulumi.Int(in.Port),
 		Protocol:        pulumi.String(in.Protocol),

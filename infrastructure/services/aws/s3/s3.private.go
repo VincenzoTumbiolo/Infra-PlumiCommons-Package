@@ -17,7 +17,7 @@ func CreateS3Bucket(ctx *pulumi.Context, in dto.S3BucketInput) (*dto.S3BucketRes
 	}
 
 	// Bucket
-	bkt, err := s3.NewBucket(ctx, "this", &s3.BucketArgs{
+	bkt, err := s3.NewBucket(ctx, in.Name, &s3.BucketArgs{
 		Bucket: pulumi.String(in.Name),
 		Tags:   tags,
 	})
@@ -26,7 +26,7 @@ func CreateS3Bucket(ctx *pulumi.Context, in dto.S3BucketInput) (*dto.S3BucketRes
 	}
 
 	// Public access block
-	pab, err := s3.NewBucketPublicAccessBlock(ctx, "this", &s3.BucketPublicAccessBlockArgs{
+	pab, err := s3.NewBucketPublicAccessBlock(ctx, fmt.Sprintf("%s-policy", in.Name), &s3.BucketPublicAccessBlockArgs{
 		Bucket:                bkt.ID(),
 		BlockPublicAcls:       pulumi.Bool(true),
 		BlockPublicPolicy:     pulumi.Bool(true),
@@ -40,7 +40,7 @@ func CreateS3Bucket(ctx *pulumi.Context, in dto.S3BucketInput) (*dto.S3BucketRes
 	// Versioning (solo se var.versioned == true)
 	var ver *s3.BucketVersioningV2
 	if in.Versioned {
-		ver, err = s3.NewBucketVersioningV2(ctx, "this", &s3.BucketVersioningV2Args{
+		ver, err = s3.NewBucketVersioningV2(ctx, fmt.Sprintf("%s-version", in.Name), &s3.BucketVersioningV2Args{
 			Bucket: bkt.ID(),
 			VersioningConfiguration: &s3.BucketVersioningV2VersioningConfigurationArgs{
 				Status: pulumi.String("Enabled"),
@@ -52,7 +52,7 @@ func CreateS3Bucket(ctx *pulumi.Context, in dto.S3BucketInput) (*dto.S3BucketRes
 	}
 
 	// SSE: AES256
-	sse, err := s3.NewBucketServerSideEncryptionConfigurationV2(ctx, "this", &s3.BucketServerSideEncryptionConfigurationV2Args{
+	sse, err := s3.NewBucketServerSideEncryptionConfigurationV2(ctx, fmt.Sprintf("%s-encription", in.Name), &s3.BucketServerSideEncryptionConfigurationV2Args{
 		Bucket: bkt.Bucket, // usa il nome del bucket
 		Rules: s3.BucketServerSideEncryptionConfigurationV2RuleArray{
 			&s3.BucketServerSideEncryptionConfigurationV2RuleArgs{
@@ -67,7 +67,7 @@ func CreateS3Bucket(ctx *pulumi.Context, in dto.S3BucketInput) (*dto.S3BucketRes
 	}
 
 	// CORS
-	cors, err := s3.NewBucketCorsConfigurationV2(ctx, "this", &s3.BucketCorsConfigurationV2Args{
+	cors, err := s3.NewBucketCorsConfigurationV2(ctx, fmt.Sprintf("%s-cors", in.Name), &s3.BucketCorsConfigurationV2Args{
 		Bucket: bkt.Bucket,
 		CorsRules: s3.BucketCorsConfigurationV2CorsRuleArray{
 			&s3.BucketCorsConfigurationV2CorsRuleArgs{
@@ -89,7 +89,7 @@ func CreateS3Bucket(ctx *pulumi.Context, in dto.S3BucketInput) (*dto.S3BucketRes
 		if err != nil {
 			return nil, err
 		}
-		pol, err = s3.NewBucketPolicy(ctx, "this", &s3.BucketPolicyArgs{
+		pol, err = s3.NewBucketPolicy(ctx, fmt.Sprintf("%s-bucket-policy", in.Name), &s3.BucketPolicyArgs{
 			Bucket: bkt.ID(),
 			Policy: pulumi.String(policyJSON),
 		})

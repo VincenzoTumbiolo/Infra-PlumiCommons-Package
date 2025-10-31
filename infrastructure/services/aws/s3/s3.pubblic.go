@@ -1,6 +1,8 @@
 package s3
 
 import (
+	"fmt"
+
 	dto "github.com/VincenzoTumbiolo/Infra-PlumiCommons-Package/infrastructure/dto/aws"
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/s3"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
@@ -14,7 +16,7 @@ func CreatePublicS3Bucket(ctx *pulumi.Context, in dto.PublicS3BucketInput) (*dto
 	}
 
 	// --- Bucket ---
-	bkt, err := s3.NewBucket(ctx, "this", &s3.BucketArgs{
+	bkt, err := s3.NewBucket(ctx, in.Name, &s3.BucketArgs{
 		Bucket: pulumi.String(in.Name),
 		Tags:   tags,
 	})
@@ -23,7 +25,7 @@ func CreatePublicS3Bucket(ctx *pulumi.Context, in dto.PublicS3BucketInput) (*dto
 	}
 
 	// --- Public Access Block (tutto disabilitato = bucket pubblico) ---
-	pab, err := s3.NewBucketPublicAccessBlock(ctx, "this", &s3.BucketPublicAccessBlockArgs{
+	pab, err := s3.NewBucketPublicAccessBlock(ctx, fmt.Sprintf("%s-bucket-policy", in.Name), &s3.BucketPublicAccessBlockArgs{
 		Bucket:                bkt.ID(),
 		BlockPublicAcls:       pulumi.Bool(false),
 		BlockPublicPolicy:     pulumi.Bool(false),
@@ -37,7 +39,7 @@ func CreatePublicS3Bucket(ctx *pulumi.Context, in dto.PublicS3BucketInput) (*dto
 	// --- Versioning (solo se richiesto) ---
 	var ver *s3.BucketVersioningV2
 	if in.Versioned {
-		ver, err = s3.NewBucketVersioningV2(ctx, "this", &s3.BucketVersioningV2Args{
+		ver, err = s3.NewBucketVersioningV2(ctx, fmt.Sprintf("%s-version", in.Name), &s3.BucketVersioningV2Args{
 			Bucket: bkt.ID(),
 			VersioningConfiguration: &s3.BucketVersioningV2VersioningConfigurationArgs{
 				Status: pulumi.String("Enabled"),
@@ -49,7 +51,7 @@ func CreatePublicS3Bucket(ctx *pulumi.Context, in dto.PublicS3BucketInput) (*dto
 	}
 
 	// --- Server Side Encryption AES256 ---
-	sse, err := s3.NewBucketServerSideEncryptionConfigurationV2(ctx, "this", &s3.BucketServerSideEncryptionConfigurationV2Args{
+	sse, err := s3.NewBucketServerSideEncryptionConfigurationV2(ctx, fmt.Sprintf("%s-encription", in.Name), &s3.BucketServerSideEncryptionConfigurationV2Args{
 		Bucket: bkt.Bucket,
 		Rules: s3.BucketServerSideEncryptionConfigurationV2RuleArray{
 			&s3.BucketServerSideEncryptionConfigurationV2RuleArgs{

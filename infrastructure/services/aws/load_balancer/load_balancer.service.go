@@ -31,7 +31,7 @@ func CreateService(ctx *pulumi.Context, in dto.LoadBalancerInput) (*lb.LoadBalan
 		tags = pulumi.StringMap{}
 	}
 
-	lbRes, err := lb.NewLoadBalancer(ctx, "this", &lb.LoadBalancerArgs{
+	lbRes, err := lb.NewLoadBalancer(ctx, in.LbName, &lb.LoadBalancerArgs{
 		Name:                     pulumi.String(in.LbName),
 		Internal:                 pulumi.Bool(true),
 		LoadBalancerType:         pulumi.String(in.LbType),
