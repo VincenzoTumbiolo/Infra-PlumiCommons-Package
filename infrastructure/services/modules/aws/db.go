@@ -20,8 +20,7 @@ func (mod AWSModule) CreatePostgresCluster(name string, args *dto.PostgresCluste
 		return nil, err
 	}
 
-	// Cluster
-	cluster, err := rds.NewCluster(mod.Ctx, fmt.Sprintf("%s-db", name), &rds.ClusterArgs{
+	var rdsArgs = &rds.ClusterArgs{
 		ClusterIdentifier:       pulumi.StringPtr(fmt.Sprintf("%s-db", name)),
 		Engine:                  pulumi.String(args.Engine),
 		Port:                    pulumi.IntPtrFromPtr(args.Port),
@@ -38,7 +37,14 @@ func (mod AWSModule) CreatePostgresCluster(name string, args *dto.PostgresCluste
 		DeleteAutomatedBackups:  pulumi.BoolPtr(args.DeleteAutomatedBackups),
 		DeletionProtection:      pulumi.BoolPtr(args.DeletionProtection),
 		Tags:                    mod.DefaultTags,
-	}, pulumi.Protect(true))
+	}
+
+	if args.Serverlessv2ScalingConfiguration != nil {
+		rdsArgs.Serverlessv2ScalingConfiguration = rds.ClusterServerlessv2ScalingConfigurationPtr(args.Serverlessv2ScalingConfiguration)
+	}
+
+	// Cluster
+	cluster, err := rds.NewCluster(mod.Ctx, fmt.Sprintf("%s-db", name), rdsArgs, pulumi.Protect(true))
 	if err != nil {
 		return nil, err
 	}
