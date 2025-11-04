@@ -40,7 +40,7 @@ func (mod AWSModule) CreatePostgresCluster(name string, args *dto.PostgresCluste
 	}
 
 	if args.Serverlessv2ScalingConfiguration != nil {
-		rdsArgs.Serverlessv2ScalingConfiguration = rds.ClusterServerlessv2ScalingConfigurationPtr(args.Serverlessv2ScalingConfiguration)
+		rdsArgs.Serverlessv2ScalingConfiguration = args.Serverlessv2ScalingConfiguration
 	}
 
 	// Cluster
