@@ -206,7 +206,7 @@ func (mod AWSModule) CreateEndpoints(input dto.CreateEndpointsInput) ([]pulumi.R
 		input.AllOptions = append(input.AllOptions, integrationResponse, optionsMethod)
 		for i := 0; i < len(endpoint.Methods); i++ {
 			method := endpoint.Methods[i]
-			err = mod.CreateMethodIntegration(dto.CreateMethodIntegrationInput{
+			methodIntegrationRes, err := mod.CreateMethodIntegration(dto.CreateMethodIntegrationInput{
 				ApiID:           input.RestApi.ID(),
 				Name:            method.Name,
 				RootResourceID:  baseResource.ID(),
@@ -218,12 +218,14 @@ func (mod AWSModule) CreateEndpoints(input dto.CreateEndpointsInput) ([]pulumi.R
 				slog.Error("Failed to Create "+method.Name+" Method Rest API", "err: ", err)
 				return nil, err
 			}
-			_, err := lambda.NewPermission(mod.Ctx, fmt.Sprintf("%s-%s-lambda-permission", input.BaseName, method.Name), &lambda.PermissionArgs{
+			input.AllOptions = append(input.AllOptions, methodIntegrationRes...)
+			lambdaPermissionRes, err := lambda.NewPermission(mod.Ctx, fmt.Sprintf("%s-%s-lambda-permission", input.BaseName, method.Name), &lambda.PermissionArgs{
 				Action:    pulumi.String("lambda:InvokeFunction"),
 				Function:  method.TargetLambdaFunctionName,
 				Principal: pulumi.String("apigateway.amazonaws.com"),
 				SourceArn: pulumi.Sprintf("arn:aws:execute-api:%s:%s:%s/*/%s%s", input.Region, input.AccountId, input.RestApi.ID(), method.HttpMethod, baseResource.Path),
-			})
+			}, pulumi.DependsOn(input.AllOptions))
+			input.AllOptions = append(input.AllOptions, lambdaPermissionRes)
 			if err != nil {
 				return nil, err
 			}
@@ -297,7 +299,7 @@ func (mod AWSModule) CreateOptions(input dto.CreateOptionsInput) (*apigateway.In
 	return integrationResponse, optionsMethod, nil
 }
 
-func (mod AWSModule) CreateMethodIntegration(input dto.CreateMethodIntegrationInput) error {
+func (mod AWSModule) CreateMethodIntegration(input dto.CreateMethodIntegrationInput) ([]pulumi.Resource, error) {
 	var methodArgs = &apigateway.MethodArgs{
 		RestApi:       input.ApiID,
 		ResourceId:    input.RootResourceID,
@@ -315,10 +317,10 @@ func (mod AWSModule) CreateMethodIntegration(input dto.CreateMethodIntegrationIn
 	}
 	createdMethod, err := apigateway.NewMethod(mod.Ctx, fmt.Sprintf("%s-method", input.Name), methodArgs)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	_, err = apigateway.NewIntegration(mod.Ctx, fmt.Sprintf("%s-integration", input.Name), &apigateway.IntegrationArgs{
+	cretedIntegration, err := apigateway.NewIntegration(mod.Ctx, fmt.Sprintf("%s-integration", input.Name), &apigateway.IntegrationArgs{
 		RestApi:               input.ApiID,
 		ResourceId:            input.RootResourceID,
 		HttpMethod:            createdMethod.HttpMethod,
@@ -327,9 +329,9 @@ func (mod AWSModule) CreateMethodIntegration(input dto.CreateMethodIntegrationIn
 		Uri:                   input.TargetLambdaArn,
 	})
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return []pulumi.Resource{createdMethod, cretedIntegration}, nil
 }
 
 func (mod AWSModule) CreateStage(input dto.CreateStageInput) (*apigateway.Stage, error) {
