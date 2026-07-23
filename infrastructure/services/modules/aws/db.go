@@ -1,4 +1,4 @@
-package service
+package vtech_aws
 
 import (
 	"fmt"
@@ -8,7 +8,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func (mod ServiceModule) CreatePostgresCluster(name string, args *dto.PostgresClusterArgs) (*rds.Cluster, error) {
+func (mod AWSModule) CreatePostgresCluster(name string, args *dto.PostgresClusterArgs) (*rds.Cluster, error) {
 
 	// Subnet Group
 	subnetGroup, err := rds.NewSubnetGroup(mod.Ctx, fmt.Sprintf("%s-db-subnet-group", name), &rds.SubnetGroupArgs{
@@ -20,8 +20,7 @@ func (mod ServiceModule) CreatePostgresCluster(name string, args *dto.PostgresCl
 		return nil, err
 	}
 
-	// Cluster
-	cluster, err := rds.NewCluster(mod.Ctx, fmt.Sprintf("%s-db", name), &rds.ClusterArgs{
+	var rdsArgs = &rds.ClusterArgs{
 		ClusterIdentifier:       pulumi.StringPtr(fmt.Sprintf("%s-db", name)),
 		Engine:                  pulumi.String(args.Engine),
 		Port:                    pulumi.IntPtrFromPtr(args.Port),
@@ -38,7 +37,14 @@ func (mod ServiceModule) CreatePostgresCluster(name string, args *dto.PostgresCl
 		DeleteAutomatedBackups:  pulumi.BoolPtr(args.DeleteAutomatedBackups),
 		DeletionProtection:      pulumi.BoolPtr(args.DeletionProtection),
 		Tags:                    mod.DefaultTags,
-	}, pulumi.Protect(true))
+	}
+
+	if args.Serverlessv2ScalingConfiguration != nil {
+		rdsArgs.Serverlessv2ScalingConfiguration = args.Serverlessv2ScalingConfiguration
+	}
+
+	// Cluster
+	cluster, err := rds.NewCluster(mod.Ctx, fmt.Sprintf("%s-db", name), rdsArgs, pulumi.Protect(true))
 	if err != nil {
 		return nil, err
 	}

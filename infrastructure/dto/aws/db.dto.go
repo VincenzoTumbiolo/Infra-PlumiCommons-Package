@@ -2,6 +2,7 @@ package dto
 
 import (
 	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/ec2"
+	"github.com/pulumi/pulumi-aws/sdk/v7/go/aws/rds"
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
@@ -25,4 +26,6 @@ type PostgresClusterArgs struct {
 
 	Ingress ec2.SecurityGroupIngressArray
 	Egress  ec2.SecurityGroupEgressArray
+
+	Serverlessv2ScalingConfiguration *rds.ClusterServerlessv2ScalingConfigurationArgs
 }
