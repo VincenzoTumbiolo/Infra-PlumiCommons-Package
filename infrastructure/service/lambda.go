@@ -13,7 +13,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func (mod ServiceModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function, error) {
+func (mod ServiceModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function, *iam.RolePolicy, error) {
 	args.LambdaArgs.Tags = mod.DefaultTags
 
 	var statements = mod.Policies.Build(
@@ -41,17 +41,17 @@ func (mod ServiceModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Func
 		AssumeRolePolicy: pulumi.String(policy.IAM_LAMBDA_ASSUME_ROLE),
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	// IAM Role Policy
-	_, err = iam.NewRolePolicy(mod.Ctx, fmt.Sprintf("%s-role", args.LambdaArgs.Name), &iam.RolePolicyArgs{
+	fnRolePolicy, err := iam.NewRolePolicy(mod.Ctx, fmt.Sprintf("%s-role", args.LambdaArgs.Name), &iam.RolePolicyArgs{
 		Name:   pulumi.String(fmt.Sprintf("%s-policy", args.LambdaArgs.Name)),
 		Role:   getDumperRole.ID(),
 		Policy: getDumperPolicyDoc.Json(),
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var fn *lambda.Function
@@ -67,7 +67,7 @@ func (mod ServiceModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Func
 		fn, err = nil, errors.New("unsupported lambda type")
 	}
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	// Log group associato alla Lambda
@@ -77,8 +77,8 @@ func (mod ServiceModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Func
 		Tags:            mod.DefaultTags,
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return fn, nil
+	return fn, fnRolePolicy, nil
 }
