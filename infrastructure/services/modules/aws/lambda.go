@@ -14,7 +14,6 @@ import (
 )
 
 func (mod AWSModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function, *iam.RolePolicy, error) {
-	args.LambdaArgs.Tags = mod.DefaultTags
 
 	var statements = mod.Policies.Build(
 		policy.StatementSpec{
@@ -74,7 +73,7 @@ func (mod AWSModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function
 	_, err = cloudwatch.NewLogGroup(mod.Ctx, fmt.Sprintf("%s-log-group", args.LambdaArgs.Name), &cloudwatch.LogGroupArgs{
 		Name:            pulumi.String(fmt.Sprintf("/aws/lambda/%s", args.LambdaArgs.Name)),
 		RetentionInDays: pulumi.Int(30),
-		Tags:            mod.DefaultTags,
+		Tags:            args.LambdaArgs.Tags,
 	})
 	if err != nil {
 		return nil, nil, err
