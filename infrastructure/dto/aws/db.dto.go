@@ -28,4 +28,6 @@ type PostgresClusterArgs struct {
 	Egress  ec2.SecurityGroupEgressArray
 
 	Serverlessv2ScalingConfiguration *rds.ClusterServerlessv2ScalingConfigurationArgs
+
+	Tags pulumi.StringMap
 }

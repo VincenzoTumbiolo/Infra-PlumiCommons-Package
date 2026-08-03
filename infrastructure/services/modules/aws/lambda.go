@@ -13,8 +13,7 @@ import (
 	"github.com/pulumi/pulumi/sdk/v3/go/pulumi"
 )
 
-func (mod AWSModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function, error) {
-	args.LambdaArgs.Tags = mod.DefaultTags
+func (mod AWSModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function, *iam.RolePolicy, error) {
 
 	var statements = mod.Policies.Build(
 		policy.StatementSpec{
@@ -41,17 +40,17 @@ func (mod AWSModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function
 		AssumeRolePolicy: pulumi.String(policy.IAM_LAMBDA_ASSUME_ROLE),
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	// IAM Role Policy
-	_, err = iam.NewRolePolicy(mod.Ctx, fmt.Sprintf("%s-role", args.LambdaArgs.Name), &iam.RolePolicyArgs{
+	fnRolePolicy, err := iam.NewRolePolicy(mod.Ctx, fmt.Sprintf("%s-role", args.LambdaArgs.Name), &iam.RolePolicyArgs{
 		Name:   pulumi.String(fmt.Sprintf("%s-policy", args.LambdaArgs.Name)),
 		Role:   getDumperRole.ID(),
 		Policy: getDumperPolicyDoc.Json(),
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	var fn *lambda.Function
@@ -67,18 +66,18 @@ func (mod AWSModule) CreateLambda(args *dto.ServiceLambdaArgs) (*lambda.Function
 		fn, err = nil, errors.New("unsupported lambda type")
 	}
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	// Log group associato alla Lambda
 	_, err = cloudwatch.NewLogGroup(mod.Ctx, fmt.Sprintf("%s-log-group", args.LambdaArgs.Name), &cloudwatch.LogGroupArgs{
 		Name:            pulumi.String(fmt.Sprintf("/aws/lambda/%s", args.LambdaArgs.Name)),
 		RetentionInDays: pulumi.Int(30),
-		Tags:            mod.DefaultTags,
+		Tags:            args.LambdaArgs.Tags,
 	})
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
-	return fn, nil
+	return fn, fnRolePolicy, nil
 }

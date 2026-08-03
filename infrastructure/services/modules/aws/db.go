@@ -36,7 +36,7 @@ func (mod AWSModule) CreatePostgresCluster(name string, args *dto.PostgresCluste
 		FinalSnapshotIdentifier: pulumi.StringPtr(fmt.Sprintf("%s-db-final-snapshot", name)),
 		DeleteAutomatedBackups:  pulumi.BoolPtr(args.DeleteAutomatedBackups),
 		DeletionProtection:      pulumi.BoolPtr(args.DeletionProtection),
-		Tags:                    mod.DefaultTags,
+		Tags:                    args.Tags,
 	}
 
 	if args.Serverlessv2ScalingConfiguration != nil {
@@ -57,7 +57,7 @@ func (mod AWSModule) CreatePostgresCluster(name string, args *dto.PostgresCluste
 			InstanceClass:      pulumi.String(args.ClusterInstanceClass),
 			Engine:             rds.EngineType(args.Engine),
 			PubliclyAccessible: pulumi.BoolPtrFromPtr(args.PubliclyAccessible),
-			Tags:               mod.DefaultTags,
+			Tags:               args.Tags,
 		}, pulumi.DependsOn([]pulumi.Resource{cluster}))
 		if err != nil {
 			return nil, err
