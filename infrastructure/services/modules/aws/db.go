@@ -66,3 +66,47 @@ func (mod AWSModule) CreatePostgresCluster(name string, args *dto.PostgresCluste
 
 	return cluster, nil
 }
+
+func (mod AWSModule) CreatePostgresInstance(name string, args *dto.PostgresInstanceArgs) (*rds.Instance, error) {
+
+	// Subnet Group
+	subnetGroup, err := rds.NewSubnetGroup(mod.Ctx, fmt.Sprintf("%s-db-subnet-group", name), &rds.SubnetGroupArgs{
+		Name:      pulumi.String(fmt.Sprintf("%s-db-subnet-group", name)),
+		SubnetIds: pulumi.ToStringArray(args.SubnetIds),
+		Tags:      mod.DefaultTags,
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	var rdsArgs = &rds.InstanceArgs{
+		Identifier:              pulumi.StringPtr(fmt.Sprintf("%s-db", name)),
+		Engine:                  pulumi.String(args.Engine),
+		EngineVersion:           pulumi.StringPtrFromPtr(args.EngineVersion),
+		InstanceClass:           pulumi.String(args.InstanceClass),
+		AllocatedStorage:        pulumi.IntPtrFromPtr(args.AllocatedStorage),
+		MaxAllocatedStorage:     pulumi.IntPtrFromPtr(args.MaxAllocatedStorage),
+		StorageType:             pulumi.StringPtrFromPtr(args.StorageType),
+		Port:                    pulumi.IntPtrFromPtr(args.Port),
+		DbName:                  pulumi.StringPtrFromPtr(args.DbName),
+		Username:                pulumi.StringPtrFromPtr(args.MasterUsername),
+		Password:                pulumi.StringPtrFromPtr(args.MasterPassword),
+		DbSubnetGroupName:       subnetGroup.Name,
+		VpcSecurityGroupIds:     args.SecurityGroupIds,
+		PubliclyAccessible:      pulumi.BoolPtrFromPtr(args.PubliclyAccessible),
+		BackupRetentionPeriod:   pulumi.IntPtrFromPtr(args.BackupRetentionPeriod),
+		SkipFinalSnapshot:       pulumi.BoolPtr(*args.SkipFinalSnapshot),
+		FinalSnapshotIdentifier: pulumi.StringPtr(fmt.Sprintf("%s-db-final-snapshot", name)),
+		DeleteAutomatedBackups:  pulumi.BoolPtr(*args.DeleteAutomatedBackups),
+		DeletionProtection:      pulumi.BoolPtr(*args.DeletionProtection),
+		Tags:                    args.Tags,
+	}
+
+	// Instance RDS Standard
+	instance, err := rds.NewInstance(mod.Ctx, fmt.Sprintf("%s-db", name), rdsArgs, pulumi.Protect(true))
+	if err != nil {
+		return nil, err
+	}
+
+	return instance, nil
+}
