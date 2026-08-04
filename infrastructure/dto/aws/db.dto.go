@@ -31,3 +31,24 @@ type PostgresClusterArgs struct {
 
 	Tags pulumi.StringMap
 }
+
+type PostgresInstanceArgs struct {
+	Engine                 string
+	EngineVersion          *string
+	InstanceClass          string
+	AllocatedStorage       *int
+	MaxAllocatedStorage    *int
+	StorageType            *string
+	DbName                 *string
+	MasterUsername         *string
+	MasterPassword         *string
+	Port                   *int
+	SubnetIds              []string
+	SecurityGroupIds       pulumi.StringArrayInput
+	PubliclyAccessible     *bool
+	BackupRetentionPeriod  *int
+	SkipFinalSnapshot      *bool
+	DeleteAutomatedBackups *bool
+	DeletionProtection     *bool
+	Tags                   pulumi.StringMap
+}
